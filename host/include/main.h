@@ -32,6 +32,7 @@
 #define BACKWARD_BACK_ADD_CMD 20
 
 #define MAKE_AVG_CMD 21
+#define ACTIVATE_CMD 22
 
 #define TA_DARKNETP_UUID \
 	{ 0x7fc5c039, 0x0542, 0x4ee1, \
@@ -92,5 +93,7 @@ void transfer_weights_CA(float *vec, int length, int layer_i, char type, int add
 void save_weights_CA(float *vec, int length, int layer_i, char type);
 
 void summary_array(char *print_name, float *arr, int n);
+
+float activate_CA(float x, int a);
 
 #endif

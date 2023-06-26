@@ -873,6 +873,25 @@ static TEE_Result net_output_return_TA_params(uint32_t param_types,
 
 }
 
+static TEE_Result activate_TA_params(uint32_t param_types,
+                                              TEE_Param params[4])
+{
+    uint32_t exp_param_types = TEE_PARAM_TYPES( TEE_PARAM_TYPE_VALUE_INOUT,
+                                               TEE_PARAM_TYPE_VALUE_INPUT,
+                                               TEE_PARAM_TYPE_NONE,
+                                               TEE_PARAM_TYPE_NONE);
+
+    if (param_types != exp_param_types)
+        return TEE_ERROR_BAD_PARAMETERS;
+
+    float x = params[0].value.a;
+    int n = params[1].value.a;
+    params[0].value.a = activate_tee_TA(x, n);
+
+    return TEE_SUCCESS;
+
+}
+
 TEE_Result TA_InvokeCommandEntryPoint(void __maybe_unused *sess_ctx,
                                       uint32_t cmd_id,
                                       uint32_t param_types, TEE_Param params[4])
@@ -943,6 +962,8 @@ TEE_Result TA_InvokeCommandEntryPoint(void __maybe_unused *sess_ctx,
         case BACKWARD_BACK_ADD_CMD:
         return backward_network_back_TA_addidion_params(param_types, params);
 
+        case ACTIVATE_CMD:
+        return activate_TA_params(param_types, params);
 
         default:
         return TEE_ERROR_BAD_PARAMETERS;

@@ -10,6 +10,8 @@ ACTIVATION_TA get_activation_TA(char *s);
 
 float activate_TA(float x, ACTIVATION_TA a);
 
+float activate_tee_TA(float x, int a);
+
 float*  activate_array_TA(float *x, const int n, const ACTIVATION_TA a);
 
 float gradient_TA(float x, ACTIVATION_TA a);

@@ -98,6 +98,41 @@ float activate_TA(float x, ACTIVATION_TA a)
     return 0;
 }
 
+float activate_tee_TA(float x, int a)
+{
+    switch(a){
+        case 0:
+            return linear_activate_TA(x);
+        case 1:
+            return logistic_activate_TA(x);
+        case 2:
+            return loggy_activate_TA(x);
+        case 3:
+            return relu_activate_TA(x);
+        case 4:
+            return elu_activate_TA(x);
+        case 5:
+            return selu_activate_TA(x);
+        case 6:
+            return relie_activate_TA(x);
+        case 7:
+            return ramp_activate_TA(x);
+        case 8:
+            return leaky_activate_TA(x);
+        case 9:
+            return tanh_activate_TA(x);
+        case 10:
+            return plse_activate_TA(x);
+        case 11:
+            return stair_activate_TA(x);
+        case 12:
+            return hardtan_activate_TA(x);
+        case 13:
+            return lhtan_activate_TA(x);
+    }
+    return 0;
+}
+
 float*  activate_array_TA(float *x, const int n, const ACTIVATION_TA a)
 {
     int i;

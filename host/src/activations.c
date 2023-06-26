@@ -1,5 +1,5 @@
 #include "activations.h"
-
+#include "main.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,37 +62,72 @@ ACTIVATION get_activation(char *s)
     return RELU;
 }
 
+// float activate(float x, ACTIVATION a)
+// {
+//     switch(a){
+//         case LINEAR:
+//             return linear_activate(x);
+//         case LOGISTIC:
+//             return logistic_activate(x);
+//         case LOGGY:
+//             return loggy_activate(x);
+//         case RELU:
+//             return relu_activate(x);
+//         case ELU:
+//             return elu_activate(x);
+//         case SELU:
+//             return selu_activate(x);
+//         case RELIE:
+//             return relie_activate(x);
+//         case RAMP:
+//             return ramp_activate(x);
+//         case LEAKY:
+//             return leaky_activate(x);
+//         case TANH:
+//             return tanh_activate(x);
+//         case PLSE:
+//             return plse_activate(x);
+//         case STAIR:
+//             return stair_activate(x);
+//         case HARDTAN:
+//             return hardtan_activate(x);
+//         case LHTAN:
+//             return lhtan_activate(x);
+//     }
+//     return 0;
+// }
+
 float activate(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_activate(x);
+            return activate_CA(x, 0);
         case LOGISTIC:
-            return logistic_activate(x);
+            return activate_CA(x, 1);
         case LOGGY:
-            return loggy_activate(x);
+            return activate_CA(x, 2);
         case RELU:
-            return relu_activate(x);
+            return activate_CA(x, 3);
         case ELU:
-            return elu_activate(x);
+            return activate_CA(x, 4);
         case SELU:
-            return selu_activate(x);
+            return activate_CA(x, 5);
         case RELIE:
-            return relie_activate(x);
+            return activate_CA(x, 6);
         case RAMP:
-            return ramp_activate(x);
+            return activate_CA(x, 7);
         case LEAKY:
-            return leaky_activate(x);
+            return activate_CA(x, 8);
         case TANH:
-            return tanh_activate(x);
+            return activate_CA(x, 9);
         case PLSE:
-            return plse_activate(x);
+            return activate_CA(x, 10);
         case STAIR:
-            return stair_activate(x);
+            return activate_CA(x, 11);
         case HARDTAN:
-            return hardtan_activate(x);
+            return activate_CA(x, 12);
         case LHTAN:
-            return lhtan_activate(x);
+            return activate_CA(x, 13);
     }
     return 0;
 }

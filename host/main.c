@@ -912,16 +912,45 @@ void net_output_return_CA(int net_outputs, int net_batch)
              res, origin);
 }
 
-float activate_CA(float x, int a)
+// float activate_CA(float x, int a)
+// {
+//     TEEC_Operation op;
+//     uint32_t origin;
+//     TEEC_Result res;
+
+//     memset(&op, 0, sizeof(op));
+//     op.paramTypes = TEEC_PARAM_TYPES(TEEC_VALUE_INOUT, TEEC_VALUE_INPUT,
+// 					 TEEC_NONE, TEEC_NONE);
+// 	op.params[0].value.a = x;
+//     op.params[1].value.a = a;
+
+//     res = TEEC_InvokeCommand(&sess, ACTIVATE_CMD,
+//                              &op, &origin);
+
+//     if (res != TEEC_SUCCESS)
+//     {
+//         errx(1, "TEEC_InvokeCommand(return) failed 0x%x origin 0x%x", res, origin);
+//         return -1;
+//     }
+
+//     x = op.params[0].value.a;
+//     activate_count++;
+//     // printf("activate~~~~\n");
+//     return x;
+    
+// }
+
+void activate_array_CA(float *x, int n, int a)
 {
     TEEC_Operation op;
     uint32_t origin;
     TEEC_Result res;
 
     memset(&op, 0, sizeof(op));
-    op.paramTypes = TEEC_PARAM_TYPES(TEEC_VALUE_INOUT, TEEC_VALUE_INPUT,
+    op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_INOUT, TEEC_VALUE_INPUT,
 					 TEEC_NONE, TEEC_NONE);
-	op.params[0].value.a = x;
+    op.params[0].tmpref.buffer = x;
+    op.params[0].tmpref.size = sizeof(float) * n;
     op.params[1].value.a = a;
 
     res = TEEC_InvokeCommand(&sess, ACTIVATE_CMD,
@@ -930,14 +959,10 @@ float activate_CA(float x, int a)
     if (res != TEEC_SUCCESS)
     {
         errx(1, "TEEC_InvokeCommand(return) failed 0x%x origin 0x%x", res, origin);
-        return -1;
     }
-
-    x = op.params[0].value.a;
-    activate_count++;
-    // printf("activate~~~~\n");
-    return x;
     
+    x = op.params[0].tmpref.buffer;
+    activate_count++;
 }
 
 

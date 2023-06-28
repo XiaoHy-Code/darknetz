@@ -876,7 +876,7 @@ static TEE_Result net_output_return_TA_params(uint32_t param_types,
 static TEE_Result activate_TA_params(uint32_t param_types,
                                               TEE_Param params[4])
 {
-    uint32_t exp_param_types = TEE_PARAM_TYPES( TEE_PARAM_TYPE_VALUE_INOUT,
+    uint32_t exp_param_types = TEE_PARAM_TYPES( TEE_PARAM_TYPE_MEMREF_INOUT,
                                                TEE_PARAM_TYPE_VALUE_INPUT,
                                                TEE_PARAM_TYPE_NONE,
                                                TEE_PARAM_TYPE_NONE);
@@ -884,9 +884,10 @@ static TEE_Result activate_TA_params(uint32_t param_types,
     if (param_types != exp_param_types)
         return TEE_ERROR_BAD_PARAMETERS;
 
-    float x = params[0].value.a;
+    float *x = params[0].memref.buffer;
+    int buffersize = params[0].memref.size / sizeof(float);
     int n = params[1].value.a;
-    params[0].value.a = activate_tee_TA(x, n);
+    activate_array_tee_TA(x, buffersize, n);
 
     return TEE_SUCCESS;
 

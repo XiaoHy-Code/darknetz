@@ -133,6 +133,14 @@ float activate_tee_TA(float x, int a)
     return 0;
 }
 
+void activate_array_tee_TA(float *x, const int n, int a)
+{
+    for(int i = 0; i < n; i++)
+    {
+        x[i] = activate_tee_TA(x[i], a);
+    }
+}
+
 float*  activate_array_TA(float *x, const int n, const ACTIVATION_TA a)
 {
     int i;

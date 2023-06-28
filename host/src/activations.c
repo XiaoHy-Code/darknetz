@@ -62,82 +62,114 @@ ACTIVATION get_activation(char *s)
     return RELU;
 }
 
-// float activate(float x, ACTIVATION a)
-// {
-//     switch(a){
-//         case LINEAR:
-//             return linear_activate(x);
-//         case LOGISTIC:
-//             return logistic_activate(x);
-//         case LOGGY:
-//             return loggy_activate(x);
-//         case RELU:
-//             return relu_activate(x);
-//         case ELU:
-//             return elu_activate(x);
-//         case SELU:
-//             return selu_activate(x);
-//         case RELIE:
-//             return relie_activate(x);
-//         case RAMP:
-//             return ramp_activate(x);
-//         case LEAKY:
-//             return leaky_activate(x);
-//         case TANH:
-//             return tanh_activate(x);
-//         case PLSE:
-//             return plse_activate(x);
-//         case STAIR:
-//             return stair_activate(x);
-//         case HARDTAN:
-//             return hardtan_activate(x);
-//         case LHTAN:
-//             return lhtan_activate(x);
-//     }
-//     return 0;
-// }
-
 float activate(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return activate_CA(x, 0);
+            return linear_activate(x);
         case LOGISTIC:
-            return activate_CA(x, 1);
+            return logistic_activate(x);
         case LOGGY:
-            return activate_CA(x, 2);
+            return loggy_activate(x);
         case RELU:
-            return activate_CA(x, 3);
+            return relu_activate(x);
         case ELU:
-            return activate_CA(x, 4);
+            return elu_activate(x);
         case SELU:
-            return activate_CA(x, 5);
+            return selu_activate(x);
         case RELIE:
-            return activate_CA(x, 6);
+            return relie_activate(x);
         case RAMP:
-            return activate_CA(x, 7);
+            return ramp_activate(x);
         case LEAKY:
-            return activate_CA(x, 8);
+            return leaky_activate(x);
         case TANH:
-            return activate_CA(x, 9);
+            return tanh_activate(x);
         case PLSE:
-            return activate_CA(x, 10);
+            return plse_activate(x);
         case STAIR:
-            return activate_CA(x, 11);
+            return stair_activate(x);
         case HARDTAN:
-            return activate_CA(x, 12);
+            return hardtan_activate(x);
         case LHTAN:
-            return activate_CA(x, 13);
+            return lhtan_activate(x);
     }
     return 0;
 }
 
+// float activate(float x, ACTIVATION a)
+// {
+//     switch(a){
+//         case LINEAR:
+//             return activate_CA(x, 0);
+//         case LOGISTIC:
+//             return activate_CA(x, 1);
+//         case LOGGY:
+//             return activate_CA(x, 2);
+//         case RELU:
+//             return activate_CA(x, 3);
+//         case ELU:
+//             return activate_CA(x, 4);
+//         case SELU:
+//             return activate_CA(x, 5);
+//         case RELIE:
+//             return activate_CA(x, 6);
+//         case RAMP:
+//             return activate_CA(x, 7);
+//         case LEAKY:
+//             return activate_CA(x, 8);
+//         case TANH:
+//             return activate_CA(x, 9);
+//         case PLSE:
+//             return activate_CA(x, 10);
+//         case STAIR:
+//             return activate_CA(x, 11);
+//         case HARDTAN:
+//             return activate_CA(x, 12);
+//         case LHTAN:
+//             return activate_CA(x, 13);
+//     }
+//     return 0;
+// }
+
 void activate_array(float *x, const int n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        x[i] = activate(x[i], a);
+    // int i;
+    // for(i = 0; i < n; ++i){
+    //     x[i] = activate(x[i], a);
+    // }
+    int i = 0;
+    switch(a){
+        case LINEAR:
+            i = 0;
+        case LOGISTIC:
+            i = 1;
+        case LOGGY:
+            i = 2;
+        case RELU:
+            i = 3;
+        case ELU:
+            i = 4;
+        case SELU:
+            i = 5;
+        case RELIE:
+            i = 6;
+        case RAMP:
+            i = 7;
+        case LEAKY:
+            i = 8;
+        case TANH:
+            i = 9;
+        case PLSE:
+            i = 10;
+        case STAIR:
+            i = 11;
+        case HARDTAN:
+            i = 12;
+        case LHTAN:
+            i = 13;
     }
+    activate_array_CA(x, n, i);
 }
 
 float gradient(float x, ACTIVATION a)

@@ -94,6 +94,7 @@ void save_weights_CA(float *vec, int length, int layer_i, char type);
 
 void summary_array(char *print_name, float *arr, int n);
 
-float activate_CA(float x, int a);
+// float activate_CA(float x, int a);
+void activate_array_CA(float *x, int n, int a);
 
 #endif

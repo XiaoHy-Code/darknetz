@@ -960,8 +960,6 @@ void activate_array_CA(float *x, int n, int a)
     {
         errx(1, "TEEC_InvokeCommand(return) failed 0x%x origin 0x%x", res, origin);
     }
-    
-    x = op.params[0].tmpref.buffer;
     activate_count++;
 }
 

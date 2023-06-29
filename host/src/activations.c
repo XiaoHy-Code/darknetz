@@ -138,36 +138,51 @@ void activate_array(float *x, const int n, const ACTIVATION a)
     // for(i = 0; i < n; ++i){
     //     x[i] = activate(x[i], a);
     // }
+    
     int i = 0;
     switch(a){
         case LINEAR:
             i = 0;
+            break;
         case LOGISTIC:
             i = 1;
+            break;
         case LOGGY:
             i = 2;
+            break;
         case RELU:
             i = 3;
+            break;
         case ELU:
             i = 4;
+            break;
         case SELU:
             i = 5;
+            break;
         case RELIE:
             i = 6;
+            break;
         case RAMP:
             i = 7;
+            break;
         case LEAKY:
             i = 8;
+            break;
         case TANH:
             i = 9;
+            break;
         case PLSE:
             i = 10;
+            break;
         case STAIR:
             i = 11;
+            break;
         case HARDTAN:
             i = 12;
+            break;
         case LHTAN:
             i = 13;
+            break;
     }
     activate_array_CA(x, n, i);
 }

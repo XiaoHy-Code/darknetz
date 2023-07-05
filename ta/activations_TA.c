@@ -135,9 +135,10 @@ float activate_tee_TA(float x, int a)
 
 void activate_array_tee_TA(float *x, const int n, int a)
 {
+    float recover = -2.0;
     for(int i = 0; i < n; i++)
     {
-        x[i] = activate_tee_TA(x[i], a);
+        x[i] = activate_tee_TA(x[i] * recover, a);
     }
 }
 

@@ -108,6 +108,16 @@ void softmax_cpu_TA(float *input, int n, int batch, int batch_offset, int groups
     }
 }
 
+void softmax_cpu_TA2(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, int layer, float temp, float *output)
+{
+    int g, b;
+    for(b = 0; b < batch; ++b){
+        for(g = 0; g < groups; ++g){
+            softmax_TA(input + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
+        }
+    }
+}
+
 
 
 void softmax_x_ent_cpu_TA(int n, float *pred, float *truth, float *delta, float *error)

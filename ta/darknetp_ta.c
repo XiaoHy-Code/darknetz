@@ -18,6 +18,7 @@
 #include "diffprivate_TA.h"
 #include "parser_TA.h"
 #include "math_TA.h"
+#include "blas_TA.h"
 
 #define LOOKUP_SIZE 4096
 
@@ -893,6 +894,34 @@ static TEE_Result activate_TA_params(uint32_t param_types,
 
 }
 
+static TEE_Result softmax_TA_params(uint32_t param_types,
+                                              TEE_Param params[4])
+{
+    uint32_t exp_param_types = TEE_PARAM_TYPES( TEE_PARAM_TYPE_MEMREF_INPUT,
+                                               TEE_PARAM_TYPE_MEMREF_INOUT,
+                                               TEE_PARAM_TYPE_MEMREF_INPUT,
+                                               TEE_PARAM_TYPE_VALUE_INPUT);
+
+    if (param_types != exp_param_types)
+        return TEE_ERROR_BAD_PARAMETERS;
+    float *input = params[0].memref.buffer;
+    float *output = params[1].memref.buffer;
+    int *intparam = params[2].memref.buffer;
+    float temp = params[3].value.a;
+    int n = intparam[0];
+    int batch = intparam[1];
+    int batch_offset = intparam[2];
+    int groups = intparam[3];
+    int group_offset = intparam[4];
+    int stride = intparam[5];
+    int layer = intparam[6];
+
+    softmax_cpu_TA2(input, n, batch, batch_offset, groups, group_offset, stride, layer, temp, output);
+
+    return TEE_SUCCESS;
+
+}
+
 TEE_Result TA_InvokeCommandEntryPoint(void __maybe_unused *sess_ctx,
                                       uint32_t cmd_id,
                                       uint32_t param_types, TEE_Param params[4])
@@ -965,6 +994,9 @@ TEE_Result TA_InvokeCommandEntryPoint(void __maybe_unused *sess_ctx,
 
         case ACTIVATE_CMD:
         return activate_TA_params(param_types, params);
+
+        case SOFTMAX_CMD:
+        return softmax_TA_params(param_types, params);
 
         default:
         return TEE_ERROR_BAD_PARAMETERS;

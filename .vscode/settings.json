@@ -1,5 +1,13 @@
 {
     "files.associations": {
-        "darknetp_ta.h": "c"
+        "darknetp_ta.h": "c",
+        "istream": "c",
+        "ostream": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "softmax_layer.h": "c"
     }
 }

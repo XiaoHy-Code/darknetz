@@ -76,6 +76,87 @@ float *get_regression_values(char **labels, int n)
         return v;
 }
 
+char *get_layertype_string(LAYER_TYPE type)
+{
+        if(type == CONVOLUTIONAL || type == DECONVOLUTIONAL){
+                return "CONVOLUTIONAL";
+        }else if(type == CONNECTED){
+                return "CONNECTED";
+        }else if(type == BATCHNORM){
+                return "BATCHNORM";
+        }else if(type == CRNN){
+                return "CRNN";
+        }else if(type == RNN){
+                return "RNN";
+        }else if (type == LSTM) {
+                return "LSTM";
+        }else if (type == GRU) {
+                return "GRU";
+        }else if(type == LOCAL){
+                return "LOCAL";
+
+        }else {
+                return "Unknown layer type";
+        }
+}
+
+void run_confusion(int argc, char **argv) 
+{
+        if(argc < 5) {
+                fprintf(stderr, "usage: %s %s [cfg] [oldweights] [newweights]\n", argv[0], argv[1]);
+                return;
+        }
+        char *cfgfile = argv[2];
+        char *oldweightfile = argv[3];
+        char *newweightfile = argv[4];
+        printf(" cfgfile: %s\n oldweightfile: %s\n newweights: %s\n", cfgfile, oldweightfile, newweightfile);
+        network *net = load_network(cfgfile, oldweightfile, 0);
+
+        printf("confusion weights start...\n");
+        float confusion = -0.5;
+        for(int i = 0; i < net->n; ++i) {
+                layer l = net->layers[i];
+                printf("current layer: %s\n", get_layertype_string(l.type));
+                if (l.dontload) {
+                        continue;
+                } else if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
+                        if(l.numload) l.n = l.numload;
+                        int num = l.c / l.groups * l.n * l.size * l.size;
+                        float *biases = l.biases;
+                        for(int i = 0; i < l.n; i++) {
+                                biases[i] *= confusion;
+                        }
+                        if (l.batch_normalize && (!l.dontloadscales)){
+                                printf("TODO: batch normaliztion in convolutional\n");
+                        }
+                        float *weights = l.weights;
+                        for(int j = 0; j < num; j++) {
+                                weights[j] *= confusion;
+                        }
+                } else if(l.type == CONNECTED){
+                        float *biases = l.biases;
+                        float *weights = l.weights;
+                        for(int i = 0; i < l.outputs; i++) {
+                                biases[i] *= confusion;
+                        }
+                        for(int j = 0; j < l.outputs * l.inputs; j++) {
+                                weights[j] *= confusion;
+                        }
+
+                        if (l.batch_normalize && (!l.dontloadscales)) {
+                                printf("TODO: batch normaliztion in connected\n");
+                        }
+                } else if(l.type == BATCHNORM){
+                        printf("TODO: batch normaliztion layer\n");
+                } else{
+                        printf("we dont deal this layer\n");
+                }
+        }
+        printf("confusion weights over...\n");
+        save_weights(net, newweightfile); 
+        printf("the new weights in %s\n", newweightfile);    
+        free_network(net);
+}
 
 void train_classifier(char *datacfg, char *cfgfile, char *weightfile_o, int *gpus, int ngpus, int clear, bool fl)
 {

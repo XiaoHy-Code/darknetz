@@ -2,7 +2,7 @@
 #include "blas.h"
 #include "cuda.h"
 #include "parser.h"
-
+#include "main.h"
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
@@ -49,11 +49,13 @@ void forward_softmax_layer(const softmax_layer l, network net)
         int count = 0;
         for (i = 0; i < l.softmax_tree->groups; ++i) {
             int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
+            // softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
+            softmax_cpu_CA(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, net.index, l.inputs, l.outputs, l.temperature, l.output + count);
             count += group_size;
         }
     } else {
-        softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
+        // softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
+        softmax_cpu_CA(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, net.index, l.inputs, l.outputs, l.temperature, l.output);
     }
 
     if(net.truth && !l.noloss){

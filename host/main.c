@@ -963,6 +963,44 @@ void activate_array_CA(float *x, int n, int a)
     activate_count++;
 }
 
+void softmax_cpu_CA(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, int layer, int inputs, int outputs, float temp, float *output)
+{
+    TEEC_Operation op;
+    uint32_t origin;
+    TEEC_Result res;
+
+    memset(&op, 0, sizeof(op));
+    int intparams[7];
+    intparams[0] = n;
+    intparams[1] = batch;
+    intparams[2] = batch_offset;
+    intparams[3] = groups;
+    intparams[4] = group_offset;
+    intparams[5] = stride;
+    intparams[6] = layer;
+    // 2 float*, 1 float, 7+2int
+    op.paramTypes = TEEC_PARAM_TYPES(TEEC_MEMREF_TEMP_INPUT, TEEC_MEMREF_TEMP_INOUT,
+					 TEEC_MEMREF_TEMP_INPUT, TEEC_VALUE_INPUT);
+    op.params[0].tmpref.buffer = input;
+    op.params[0].tmpref.size = sizeof(float) * inputs;
+
+    op.params[1].tmpref.buffer = output;
+    op.params[1].tmpref.size = sizeof(float) * outputs;
+
+    op.params[2].tmpref.buffer = intparams;
+    op.params[2].tmpref.size = sizeof(int) * 7;
+
+    op.params[3].value.a = temp;
+
+    res = TEEC_InvokeCommand(&sess, SOFTMAX_CMD,
+                             &op, &origin);
+
+    if (res != TEEC_SUCCESS)
+    {
+        errx(1, "TEEC_InvokeCommand(return) failed 0x%x origin 0x%x", res, origin);
+    }
+}
+
 
 void prepare_tee_session()
 {

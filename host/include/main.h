@@ -33,6 +33,7 @@
 
 #define MAKE_AVG_CMD 21
 #define ACTIVATE_CMD 22
+#define SOFTMAX_CMD 23
 
 #define TA_DARKNETP_UUID \
 	{ 0x7fc5c039, 0x0542, 0x4ee1, \
@@ -96,5 +97,7 @@ void summary_array(char *print_name, float *arr, int n);
 
 // float activate_CA(float x, int a);
 void activate_array_CA(float *x, int n, int a);
+
+void softmax_cpu_CA(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, int layer, int inputs, int outputs, float temp, float *output);
 
 #endif

@@ -20,6 +20,8 @@ void softmax_TA(float *input, int n, float temp, int stride, float *output);
 
 void softmax_cpu_TA(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
 
+void softmax_cpu_TA2(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, int layer, float temp, float *output);
+
 void softmax_x_ent_cpu_TA(int n, float *pred, float *truth, float *delta, float *error);
 
 void smooth_l1_cpu_TA(int n, float *pred, float *truth, float *delta, float *error);
